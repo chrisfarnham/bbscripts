@@ -1,5 +1,6 @@
 (ns farnham.scripts.tzs
-    (:require [clojure.string :as str]))
+  (:require [clojure.string :as str])
+  (:require [clojure.pprint :as pp]))
 (def now (java.time.ZonedDateTime/now))
 (def KR-timezone (java.time.ZoneId/of "Asia/Seoul"))
 (def timezones ["America/New_York" "Asia/Seoul" "Europe/Moscow"])
@@ -28,11 +29,11 @@
     (.format (KR-time time) pattern)
 )
 
-(defn show-local-times [time]
-  (map #(.format (local-time time %) pattern) timezones))
+(defn local-times [time]
+  (into {} 
+        (map #(vector % (.format (local-time time %) pattern)) timezones)))
 
 (defn -main [& _args]
-  (println timezones)
   (let [[time-str] _args
         time (if time-str (parse-time time-str) now)]
-    (println (show-local-times time))))
+    (pp/print-table timezones [(local-times time)])))
