@@ -1,2 +1,6 @@
 {:paths ["src/main/clojure"]
- :deps  {org.clojure/clojure {:mvn/version "1.10.1"}}}
+ :deps  {org.clojure/clojure {:mvn/version "1.10.1"}
+         cheshire            {:mvn/version "5.10.0"}
+         babasha.curl {:git/url "https://github.com/borkdude/babashka.curl.git"
+                       :sha "53b5b9d98f2e594384f628b0deee76b53bea5062"}}
+}

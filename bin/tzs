@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DIR="$(dirname $(realpath $0))"
+bb --classpath $DIR/../src/main/clojure --main farnham.scripts.tzs $@
+exit
