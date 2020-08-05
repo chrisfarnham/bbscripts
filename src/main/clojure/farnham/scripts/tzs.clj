@@ -14,7 +14,10 @@
 
 (defn local-times [time]
   (into {} 
-        (map #(vector % (.format (local-time time %) pattern)) timezones)))
+        (map #(vector % (local-time time %)) timezones)))
+
+(defn fmt-time [time]
+  (.format time pattern))
 
 (defn parse-int [int-str]
   (Integer/parseInt int-str))
@@ -26,4 +29,5 @@
 (defn -main [& _args]
   (let [[time-str] _args
         time (if time-str (parse-time time-str) now)]
-    (pp/print-table timezones [(local-times time)])))
+    (pp/print-table [(into {} 
+                           (map (fn [x] [x (fmt-time (local-time time x))]) timezones))])))
