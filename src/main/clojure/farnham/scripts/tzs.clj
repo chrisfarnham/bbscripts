@@ -12,10 +12,6 @@
 (defn local-time [time tz]
   (.withZoneSameInstant time (to-zoneid tz)))
 
-(defn local-times [time]
-  (into {} 
-        (map #(vector % (local-time time %)) timezones)))
-
 (defn fmt-time [time]
   (.format time pattern))
 
@@ -26,8 +22,12 @@
   (let [[hour minutes] (map parse-int (str/split time #":"))]
     (.withMinute (.withHour now hour) minutes)))
 
+; (local-time now (first timezones))
+(comment (-> now (local-time (second timezones)) fmt-time ))
+
 (defn -main [& _args]
   (let [[time-str] _args
-        time (if time-str (parse-time time-str) now)]
-    (pp/print-table [(into {} 
-                           (map (fn [x] [x (fmt-time (local-time time x))]) timezones))])))
+        time (if time-str (parse-time time-str) now)
+        lt-fn (fn [tz] (-> time (local-time tz) fmt-time))]
+    (pp/print-table [(zipmap timezones (map lt-fn timezones))]))
+)
